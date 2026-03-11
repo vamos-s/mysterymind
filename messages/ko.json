@@ -61,7 +61,7 @@
     "yourNotes": "메모",
     "saveNotesFor": "{suspectName}의 메모 저장",
     "cluesTitle": "🔍 단서",
-    "clickToReveal": "클릭하여 표시",
+    "clickToReveal": "클릭하여 표시 (-20점)",
     "notesPlaceholder": "이 용의자에 대한 메모를 작성하세요...",
     "revealed": "표시됨"
   },

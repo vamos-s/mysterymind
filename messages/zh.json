@@ -61,7 +61,9 @@
     "yourNotes": "笔记",
     "saveNotesFor": "保存{suspectName}的笔记",
     "cluesTitle": "🔍 线索",
-    "clickToReveal": "点击以显示"
+    "clickToReveal": "点击以显示",
+    "notesPlaceholder": "写下关于此嫌疑人的笔记...",
+    "revealed": "已显示"
   },
   "search": {
     "objects": "物体",
