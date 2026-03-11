@@ -43,6 +43,7 @@ export default function MysteryGame() {
   const [notes, setNotes] = useState<Record<string, string>>({});
   const [showNotes, setShowNotes] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
+  const [wasWrongAnswer, setWasWrongAnswer] = useState(false);
 
   useEffect(() => {
     if (currentProblem) {
@@ -92,6 +93,7 @@ export default function MysteryGame() {
       setShowAnswer(true);
       addScore(50); // Fixed 50 points for correct answer
       setGameComplete(true);
+      setWasWrongAnswer(false);
     } else {
       // Wrong answer - deduct 50 points as penalty
       const penalty = 50;
@@ -105,6 +107,7 @@ export default function MysteryGame() {
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
       setGameComplete(false);
+      setWasWrongAnswer(true);
     }
 
     // Scroll to result - ensure it actually scrolls to the bottom
@@ -124,14 +127,14 @@ export default function MysteryGame() {
   };
 
   const handleRestart = () => {
-    // Check if should reset to level 1 (level 2+ and points < 0)
+    // If was wrong answer on level 2+ with points < 0, reset to level 1
     const currentLevelValue = currentProblem?.level || 1;
-    if (currentLevelValue > 1 && score < 0) {
-      // Reset to level 1
+    if (wasWrongAnswer && currentLevelValue > 1 && score < 0) {
       setCurrentLevel(1);
       const level1Problem = getMysteryProblem(1);
       if (level1Problem) {
         setCurrentProblem(level1Problem);
+        setWasWrongAnswer(false);
       }
     }
     // Reset other states
@@ -192,7 +195,7 @@ export default function MysteryGame() {
 
   return (
     <NextIntlClientProvider messages={enMessages} locale="en" timeZone="Asia/Seoul">
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950 pb-24">
         <GameHeader
           title="Mystery Game"
           level={currentProblem.level}
@@ -591,15 +594,7 @@ export default function MysteryGame() {
                       </p>
                     </div>
                     <div className="flex gap-3 justify-center">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={handleRestart}
-                        className="px-6 py-3 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors font-semibold"
-                      >
-                        🔄 Try Again
-                      </motion.button>
-                      {getNextMysteryLevel(currentProblem?.level || 1) && (
+                      {getNextMysteryLevel(currentProblem?.level || 1) ? (
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
@@ -607,6 +602,15 @@ export default function MysteryGame() {
                           className="px-6 py-3 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors font-semibold"
                         >
                           ➡️ Next Level
+                        </motion.button>
+                      ) : (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={handleRestart}
+                          className="px-6 py-3 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors font-semibold"
+                        >
+                          🔄 Try Again
                         </motion.button>
                       )}
                     </div>
