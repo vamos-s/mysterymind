@@ -569,9 +569,36 @@ export default function MysteryGame() {
                           ⚠️ Warning: Low points! Another wrong answer will reset to Level 1.
                         </p>
                       )}
-                      <p className="text-gray-600 dark:text-gray-400 mt-2">
-                        Click Restart to try again
-                      </p>
+                    </div>
+                    {/* Show hints that were used */}
+                    {revealedClues.size > 0 && (
+                      <div className="mt-4">
+                        <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                          Clues you revealed:
+                        </h4>
+                        <div className="space-y-2">
+                          {currentProblem.clues
+                            .filter((clue) => revealedClues.has(clue.id))
+                            .map((clue) => (
+                              <div key={clue.id} className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                                <span className="mr-2">{CLUE_TYPE_ICONS[clue.type] || '🔍'}</span>
+                                <span className="text-yellow-700 dark:text-yellow-400 text-sm">
+                                  {clue.description}
+                                </span>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+                    <div className="mt-4 text-center">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleRestart}
+                        className="px-6 py-3 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors font-semibold"
+                      >
+                        🔄 Restart Level
+                      </motion.button>
                     </div>
                     {/* Show hints that were used */}
                     {revealedClues.size > 0 && (
@@ -604,7 +631,7 @@ export default function MysteryGame() {
           onRestart={handleRestart}
           onNextLevel={handleNextLevel}
           showHint={!timeStopped && hintsUsed < currentProblem.hintCount}
-          showRestart={true}
+          showRestart={gameComplete}
           showNextLevel={gameComplete}
         />
       </div>
