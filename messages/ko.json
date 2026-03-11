@@ -1,0 +1,67 @@
+{
+  "common": {
+    "settings": "설정",
+    "restart": "다시 시작",
+    "nextLevel": "다음 레벨",
+    "gameOver": "게임 오버",
+    "complete": "완료",
+    "level": "레벨",
+    "score": "점수",
+    "time": "시간",
+    "hint": "힌트",
+    "hints": "힌트",
+    "back": "뒤로",
+    "start": "시작",
+    "loading": "로딩 중...",
+    "home": "홈"
+  },
+  "nav": {
+    "title": "미스터리 마인드",
+    "subtitle": "퍼즐을 풀고 두뇌를 훈련하세요!"
+  },
+  "games": {
+    "mystery": {
+      "title": "미스터리",
+      "description": "누가 그랬을까요?"
+    },
+    "search": {
+      "title": "탐색",
+      "description": "숨겨진 물건을 찾으세요!"
+    },
+    "escape": {
+      "title": "탈출",
+      "description": "퍼즐을 풀고 탈출하세요!"
+    },
+    "picture": {
+      "title": "그림",
+      "description": "다른 그림을 찾으세요!"
+    }
+  },
+  "mystery": {
+    "suspect": "용의자",
+    "statement": "진술",
+    "selectSuspect": "용의자를 선택하세요",
+    "correct": "정답!",
+    "wrong": "오답!",
+    "explanation": "설명"
+  },
+  "search": {
+    "objects": "물건",
+    "found": "찾음",
+    "remaining": "남음",
+    "clickToFind": "물건을 클릭하여 찾으세요"
+  },
+  "escape": {
+    "puzzle": "퍼즐",
+    "solution": "해결",
+    "inventory": "인벤토리",
+    "examine": "조사",
+    "locked": "잠김"
+  },
+  "picture": {
+    "differences": "차이",
+    "found": "찾음",
+    "remaining": "남음",
+    "clickDifference": "차이를 클릭하세요"
+  }
+}

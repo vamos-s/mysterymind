@@ -1,0 +1,67 @@
+{
+  "common": {
+    "settings": "設定",
+    "restart": "再開",
+    "nextLevel": "次のレベル",
+    "gameOver": "ゲームオーバー",
+    "complete": "完了",
+    "level": "レベル",
+    "score": "スコア",
+    "time": "時間",
+    "hint": "ヒント",
+    "hints": "ヒント",
+    "back": "戻る",
+    "start": "スタート",
+    "loading": "読み込み中...",
+    "home": "ホーム"
+  },
+  "nav": {
+    "title": "ミステリーマインド",
+    "subtitle": "パズルを解いて脳をトレーニング！"
+  },
+  "games": {
+    "mystery": {
+      "title": "ミステリー",
+      "description": "犯人を推論せよ！"
+    },
+    "search": {
+      "title": "探索",
+      "description": "隠されたアイテムを探そう！"
+    },
+    "escape": {
+      "title": "脱出",
+      "description": "パズルを解いて脱出せよ！"
+    },
+    "picture": {
+      "title": "絵",
+      "description": "違いを見つけよう！"
+    }
+  },
+  "mystery": {
+    "suspect": "容疑者",
+    "statement": "供述",
+    "selectSuspect": "容疑者を選択してください",
+    "correct": "正解！",
+    "wrong": "不正解！",
+    "explanation": "説明"
+  },
+  "search": {
+    "objects": "アイテム",
+    "found": "見つけた",
+    "remaining": "残り",
+    "clickToFind": "アイテムをクリックして見つけよう"
+  },
+  "escape": {
+    "puzzle": "パズル",
+    "solution": "解決",
+    "inventory": "インベントリ",
+    "examine": "調査",
+    "locked": "ロック"
+  },
+  "picture": {
+    "differences": "違い",
+    "found": "見つけた",
+    "remaining": "残り",
+    "clickDifference": "違いをクリックしよう"
+  }
+}

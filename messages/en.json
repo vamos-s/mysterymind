@@ -1,0 +1,67 @@
+{
+  "common": {
+    "settings": "Settings",
+    "restart": "Restart",
+    "nextLevel": "Next Level",
+    "gameOver": "Game Over",
+    "complete": "Complete",
+    "level": "Level",
+    "score": "Score",
+    "time": "Time",
+    "hint": "Hint",
+    "hints": "Hints",
+    "back": "Back",
+    "start": "Start",
+    "loading": "Loading...",
+    "home": "Home"
+  },
+  "nav": {
+    "title": "MysteryMind",
+    "subtitle": "Solve puzzles, train your brain!"
+  },
+  "games": {
+    "mystery": {
+      "title": "Mystery",
+      "description": "Deduce who did it!"
+    },
+    "search": {
+      "title": "Search",
+      "description": "Find hidden objects!"
+    },
+    "escape": {
+      "title": "Escape",
+      "description": "Solve puzzles to escape!"
+    },
+    "picture": {
+      "title": "Picture",
+      "description": "Find the differences!"
+    }
+  },
+  "mystery": {
+    "suspect": "Suspect",
+    "statement": "Statement",
+    "selectSuspect": "Select a suspect",
+    "correct": "Correct!",
+    "wrong": "Wrong!",
+    "explanation": "Explanation"
+  },
+  "search": {
+    "objects": "Objects",
+    "found": "Found",
+    "remaining": "Remaining",
+    "clickToFind": "Click on objects to find them"
+  },
+  "escape": {
+    "puzzle": "Puzzle",
+    "solution": "Solution",
+    "inventory": "Inventory",
+    "examine": "Examine",
+    "locked": "Locked"
+  },
+  "picture": {
+    "differences": "Differences",
+    "found": "Found",
+    "remaining": "Remaining",
+    "clickDifference": "Click on the differences"
+  }
+}

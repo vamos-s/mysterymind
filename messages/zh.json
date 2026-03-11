@@ -1,0 +1,67 @@
+{
+  "common": {
+    "settings": "设置",
+    "restart": "重新开始",
+    "nextLevel": "下一关",
+    "gameOver": "游戏结束",
+    "complete": "完成",
+    "level": "等级",
+    "score": "分数",
+    "time": "时间",
+    "hint": "提示",
+    "hints": "提示",
+    "back": "返回",
+    "start": "开始",
+    "loading": "加载中...",
+    "home": "主页"
+  },
+  "nav": {
+    "title": "神秘思维",
+    "subtitle": "解谜，训练大脑！"
+  },
+  "games": {
+    "mystery": {
+      "title": "谜题",
+      "description": "推理谁干的！"
+    },
+    "search": {
+      "title": "搜索",
+      "description": "找到隐藏的物体！"
+    },
+    "escape": {
+      "title": "逃脱",
+      "description": "解谜逃脱！"
+    },
+    "picture": {
+      "title": "图片",
+      "description": "找到不同之处！"
+    }
+  },
+  "mystery": {
+    "suspect": "嫌疑人",
+    "statement": "陈述",
+    "selectSuspect": "选择嫌疑人",
+    "correct": "正确！",
+    "wrong": "错误！",
+    "explanation": "解释"
+  },
+  "search": {
+    "objects": "物体",
+    "found": "已找到",
+    "remaining": "剩余",
+    "clickToFind": "点击物体找到它"
+  },
+  "escape": {
+    "puzzle": "谜题",
+    "solution": "解决",
+    "inventory": "库存",
+    "examine": "检查",
+    "locked": "已锁定"
+  },
+  "picture": {
+    "differences": "差异",
+    "found": "已找到",
+    "remaining": "剩余",
+    "clickDifference": "点击差异"
+  }
+}
