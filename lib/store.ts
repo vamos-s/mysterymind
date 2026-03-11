@@ -49,7 +49,7 @@ export const useGameStore = create<GameState>()(
       setCurrentCategory: (category) => set({ currentCategory: category }),
       setCurrentLevel: (level) => set({ currentLevel: level }),
       addScore: (points) => set((state) => ({ score: state.score + points })),
-      subtractScore: (points) => set((state) => ({ score: Math.max(0, state.score - points) })),
+      subtractScore: (points) => set((state) => ({ score: state.score - points })), // Allow negative scores for level reset logic
       useHint: () => set((state) => ({ hintsUsed: state.hintsUsed + 1 })),
       setTimeRemaining: (time) => set({ timeRemaining: time }),
       decrementTime: () => set((state) => ({

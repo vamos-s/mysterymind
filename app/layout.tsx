@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { getRequestConfig } from 'next-intl/server';
 import "./globals.css";
+import LayoutClient from "./layout-client";
+import enMessages from '@/messages/en.json';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <LayoutClient messages={enMessages}>{children}</LayoutClient>
       </body>
     </html>
   );

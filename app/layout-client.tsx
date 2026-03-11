@@ -1,11 +1,14 @@
 'use client';
 
 import ThemeProvider from '@/components/ThemeProvider';
+import { NextIntlClientProvider } from 'next-intl';
 
-export default function LayoutClient({ children }: { children: React.ReactNode }) {
+export default function LayoutClient({ children, messages }: { children: React.ReactNode; messages: any }) {
   return (
-    <ThemeProvider>
-      {children}
-    </ThemeProvider>
+    <NextIntlClientProvider messages={messages} locale="en" timeZone="Asia/Seoul">
+      <ThemeProvider>
+        {children}
+      </ThemeProvider>
+    </NextIntlClientProvider>
   );
 }

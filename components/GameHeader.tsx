@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface GameHeaderProps {
   title: string;
@@ -32,19 +33,20 @@ export default function GameHeader({
   const router = useRouter();
   const { score } = useGameStore();
 
-  const formatTime = (seconds: number) => {
+  // Memoize formatTime to prevent recreation on every render
+  const formatTime = useCallback((seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  }, []);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (onBack) {
       onBack();
     } else {
       router.push('/');
     }
-  };
+  }, [onBack, router]);
 
   return (
     <motion.header
