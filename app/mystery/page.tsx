@@ -46,6 +46,18 @@ export default function MysteryGame() {
   const [wasWrongAnswer, setWasWrongAnswer] = useState(false);
   const [showResetWarning, setShowResetWarning] = useState(false);
 
+  // Lock/Unlock body scroll when Notes modal is open
+  useEffect(() => {
+    if (showNotes) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showNotes]);
+
   useEffect(() => {
     if (currentProblem) {
    
@@ -97,22 +109,44 @@ export default function MysteryGame() {
       setWasWrongAnswer(false);
       setShowResetWarning(false);
     } else {
-      // Wrong answer - deduct 50 points as penalty
+      // Wrong answer - check if we should reset immediately
       const penalty = 50;
       const currentLevelValue = currentProblem?.level || 1;
 
-      // Calculate if the next wrong answer will cause reset (points < 50 before deduction)
-      const shouldWarnReset = currentLevelValue > 1 && score < 50;
+      // If on level 2+ and current score < 50, reset immediately without deduction
+      if (currentLevelValue > 1 && score < 50) {
+        // Reset to level 1
+        setCurrentLevel(1);
+        const level1Problem = getMysteryProblem(1);
+        if (level1Problem) {
+          setCurrentProblem(level1Problem);
+        }
+        setSelectedSuspect(null);
+        setShowAnswer(false);
+        setTimeStopped(false);
+        setHintsUsed(0);
+        setRevealedClues(new Set());
+        setCollectedEvidence(new Set());
+        setNotes({});
+        setShowNotes(false);
+        setGameComplete(false);
+        setWasWrongAnswer(false);
+        setShowResetWarning(false);
+        // Scroll to top when resetting
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
 
-      // Deduct penalty points
+      // Otherwise, deduct points normally
       subtractScore(penalty);
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
       setGameComplete(false);
       setWasWrongAnswer(true);
 
-      // Show reset warning if on level 2+ and next wrong answer will cause reset
-      setShowResetWarning(shouldWarnReset);
+      // Show reset warning if on level 2+ and next wrong answer will cause reset (score < 50 after deduction)
+      const newScore = score - penalty;
+      setShowResetWarning(currentLevelValue > 1 && newScore < 50);
     }
 
     // Scroll to result - ensure it actually scrolls to the bottom
@@ -216,70 +250,66 @@ export default function MysteryGame() {
           showHintCounter={true}
         />
 
-        {/* Action Buttons */}
-        <div className="max-w-4xl mx-auto mt-4 px-4 flex justify-end gap-3">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleHint}
-            disabled={timeStopped || hintsUsed >= currentProblem.hintCount}
-            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 ${
-              !timeStopped && hintsUsed < currentProblem.hintCount
-                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                : 'bg-gray-500 text-gray-300 cursor-not-allowed'
-            }`}
-          >
-            💡 Get Hint (-20 pts)
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setShowNotes(!showNotes)}
-            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 ${
-              showNotes
-                ? 'bg-indigo-500 text-white'
-                : 'bg-white/20 text-white/70 hover:bg-white/30'
-            }`}
-          >
-            📝 {showNotes ? 'Hide Notes' : 'Show Notes'}
-          </motion.button>
-        </div>
-
-        {/* Notes Panel */}
+        {/* Notes Modal */}
         <AnimatePresence>
           {showNotes && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="max-w-4xl mx-auto mt-4 px-4"
-            >
-              <div className="p-6 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                  📝 Detective Notes
-                </h3>
-                <div className="space-y-4">
-                  {currentProblem.suspects.map((suspect) => (
-                    <div key={suspect.id} className="p-4 bg-white/5 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
-                          {suspect.name[0]}
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowNotes(false)}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+              />
+              {/* Modal */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-2xl md:w-full z-50"
+              >
+                <div className="bg-gray-900 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+                  {/* Header */}
+                  <div className="flex items-center justify-between p-6 border-b border-white/10">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                      📝 Detective Notes
+                    </h3>
+                    <button
+                      onClick={() => setShowNotes(false)}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70 hover:text-white"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* Content */}
+                  <div className="p-6 overflow-y-auto flex-1">
+                    <div className="space-y-4">
+                      {currentProblem.suspects.map((suspect) => (
+                        <div key={suspect.id} className="p-4 bg-white/5 rounded-lg border border-white/10">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-base">
+                              {suspect.name[0]}
+                            </div>
+                            <h4 className="font-semibold text-white text-lg">{suspect.name}</h4>
+                          </div>
+                          <textarea
+                            value={notes[suspect.id] || ''}
+                            onChange={(e) => setNotes({ ...notes, [suspect.id]: e.target.value })}
+                            placeholder="Write your notes about this suspect..."
+                            disabled={showAnswer}
+                            rows={3}
+                            className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 text-sm resize-none focus:outline-none focus:border-indigo-500 disabled:opacity-50"
+                          />
                         </div>
-                        <h4 className="font-semibold text-white">{suspect.name}</h4>
-                      </div>
-                      <textarea
-                        value={notes[suspect.id] || ''}
-                        onChange={(e) => setNotes({ ...notes, [suspect.id]: e.target.value })}
-                        placeholder="Write your notes about this suspect..."
-                        disabled={showAnswer}
-                        rows={2}
-                        className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 text-sm resize-none focus:outline-none focus:border-indigo-500 disabled:opacity-50"
-                      />
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
 
@@ -420,11 +450,13 @@ export default function MysteryGame() {
                       key={ev.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      whileHover={{ scale: isCollected ? 1 : 1.02 }}
+                      whileHover={isCollected ? { scale: 1 } : score >= ev.cost ? { scale: 1.02 } : { scale: 1 }}
                       className={`p-4 rounded-xl border-2 transition-all ${
                         isCollected
                           ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                          : 'border-yellow-500/50 bg-yellow-50/10 dark:bg-yellow-900/10 hover:border-yellow-500'
+                          : score >= ev.cost
+                            ? 'border-yellow-500/50 bg-yellow-50/10 dark:bg-yellow-900/10 hover:border-yellow-500'
+                            : 'border-yellow-500/30 bg-yellow-50/5 dark:bg-yellow-900/5 cursor-not-allowed'
                       }`}
                     >
                       <div className="flex items-start justify-between mb-2">
@@ -479,8 +511,8 @@ export default function MysteryGame() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={showAnswer ? { scale: 1 } : { scale: 1.02 }}
+                    whileTap={showAnswer ? { scale: 1 } : { scale: 0.98 }}
                     onClick={() => !showAnswer && handleAnswer(suspect.id)}
                     disabled={showAnswer}
                     className={`p-5 rounded-xl border-2 text-left transition-all ${
@@ -540,6 +572,35 @@ export default function MysteryGame() {
                 );
               })}
             </div>
+          </div>
+
+          {/* Action Buttons - Center aligned below Suspects */}
+          <div className="mb-6 flex justify-center gap-3">
+            <motion.button
+              whileHover={!timeStopped && hintsUsed < currentProblem.hintCount ? { scale: 1.05 } : { scale: 1 }}
+              whileTap={!timeStopped && hintsUsed < currentProblem.hintCount ? { scale: 0.95 } : { scale: 1 }}
+              onClick={handleHint}
+              disabled={timeStopped || hintsUsed >= currentProblem.hintCount}
+              className={`px-5 py-3 rounded-lg font-semibold text-base transition-all flex items-center gap-2 ${
+                !timeStopped && hintsUsed < currentProblem.hintCount
+                  ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                  : 'bg-gray-500 text-gray-300 cursor-not-allowed'
+              }`}
+            >
+              💡 Get Hint (-20 pts)
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowNotes(!showNotes)}
+              className={`px-5 py-3 rounded-lg font-semibold text-base transition-all flex items-center gap-2 ${
+                showNotes
+                  ? 'bg-indigo-500 text-white'
+                  : 'bg-white/20 text-white/70 hover:bg-white/30'
+              }`}
+            >
+              📝 {showNotes ? 'Hide Notes' : 'Show Notes'}
+            </motion.button>
           </div>
 
           {/* Clues */}
@@ -630,9 +691,11 @@ export default function MysteryGame() {
                       <p className="text-red-700 dark:text-red-400 font-bold text-lg">
                         You selected the wrong suspect!
                       </p>
-                      <p className="text-red-600 dark:text-red-500 font-bold mt-1">
-                        -50 Points Penalty!
-                      </p>
+                      {currentProblem?.level > 1 && (
+                        <p className="text-red-600 dark:text-red-500 font-bold mt-1">
+                          -50 Points Penalty!
+                        </p>
+                      )}
                     </div>
                     {/* Reset Warning - show when another wrong answer would cause reset */}
                     {showResetWarning && (
