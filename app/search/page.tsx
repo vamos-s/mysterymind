@@ -12,10 +12,9 @@ import enMessages from '@/messages/en.json';
 export default function SearchGame() {
   const { currentLevel, addScore } = useGameStore();
 
-  const [currentProblem, setCurrentProblem] = useState<SearchProblem | null>(searchProblems[0]);
+  const [currentProblem] = useState<SearchProblem | null>(searchProblems[0]);
   const [foundObjects, setFoundObjects] = useState<Set<string>>(new Set());
   const [timeRemaining, setTimeRemaining] = useState(currentProblem?.timeLimit || 180);
-  const [hintsUsed, setHintsUsed] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
 
@@ -32,12 +31,6 @@ export default function SearchGame() {
 
     return () => clearInterval(timer);
   }, []);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const handleObjectClick = (objectId: string) => {
     if (!foundObjects.has(objectId)) {
@@ -61,22 +54,10 @@ export default function SearchGame() {
     setShowHint(false);
     setTimeRemaining(currentProblem?.timeLimit || 180);
     setGameComplete(false);
-    setHintsUsed(0);
   };
 
   const handleNextLevel = () => {
     handleRestart();
-  };
-
-  const handleHint = () => {
-    if (hintsUsed < (currentProblem?.hintCount || 0) && currentProblem) {
-      const unfoundObject = currentProblem.objects.find((obj) => !foundObjects.has(obj.id));
-      if (unfoundObject) {
-        setHintsUsed((prev) => prev + 1);
-        setShowHint(true);
-        setTimeout(() => setShowHint(false), 3000);
-      }
-    }
   };
 
   if (!currentProblem) return null;
@@ -196,7 +177,6 @@ export default function SearchGame() {
         </motion.div>
 
         <GameFooter
-          category="search"
           onRestart={handleRestart}
           onNextLevel={handleNextLevel}
           showHint={!gameComplete}

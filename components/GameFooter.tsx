@@ -1,12 +1,11 @@
 'use client';
 
-import { useGameStore, GameCategory } from '@/lib/store';
+import { useGameStore } from '@/lib/store';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
 interface GameFooterProps {
-  category?: GameCategory;
   onRestart?: () => void;
   onNextLevel?: () => void;
   showHint?: boolean;
@@ -15,7 +14,6 @@ interface GameFooterProps {
 }
 
 export default function GameFooter({
-  category,
   onRestart,
   onNextLevel,
   showHint = true,

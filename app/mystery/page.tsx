@@ -25,8 +25,9 @@ const CLUE_TYPE_ICONS = {
   time: '⏱️',
   location: '📍',
   evidence: '🔍',
-  witness: '👁️'
-};
+  witness: '👁️',
+  alibi: '🛡️'
+} as const;
 
 export default function MysteryGame() {
   const { currentLevel, addScore, score } = useGameStore();
@@ -34,7 +35,6 @@ export default function MysteryGame() {
   const [currentProblem, setCurrentProblem] = useState<MysteryProblem | null>(getMysteryProblem(currentLevel) || mysteryProblems[0]);
   const [selectedSuspect, setSelectedSuspect] = useState<string | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(currentProblem?.timeLimit || 300);
   const [timeStopped, setTimeStopped] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
@@ -45,12 +45,17 @@ export default function MysteryGame() {
   const [gameComplete, setGameComplete] = useState(false);
 
   useEffect(() => {
-    setTimeRemaining(currentProblem?.timeLimit || 300);
-    setSelectedSuspect(null);
-    setShowAnswer(false);
-    setHintsUsed(0);
-    setRevealedClues(new Set());
-    setGameComplete(false);
+    if (currentProblem) {
+   
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTimeRemaining(currentProblem.timeLimit);
+      setSelectedSuspect(null);
+      setShowAnswer(false);
+      setHintsUsed(0);
+      setRevealedClues(new Set());
+      setGameComplete(false);
+      setTimeStopped(false);
+    }
   }, [currentProblem]);
 
   useEffect(() => {
@@ -61,7 +66,7 @@ export default function MysteryGame() {
         if (prev <= 1) {
           clearInterval(timer);
           setShowAnswer(true);
-          setGameOver(true);
+          setGameComplete(false);
           return 0;
         }
         return prev - 1;
@@ -91,7 +96,7 @@ export default function MysteryGame() {
       // Wrong answer - game over, show result
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
-      setGameOver(true);
+      setGameComplete(false);
     }
   };
 
@@ -109,7 +114,6 @@ export default function MysteryGame() {
   const handleRestart = () => {
     setSelectedSuspect(null);
     setShowAnswer(false);
-    setGameOver(false);
     setTimeStopped(false);
     setHintsUsed(0);
     setRevealedClues(new Set());
@@ -121,14 +125,13 @@ export default function MysteryGame() {
   };
 
   const handleNextLevel = () => {
-    const nextLevel = getNextMysteryLevel(currentProblem.level);
+    const nextLevel = getNextMysteryLevel(currentProblem?.level || 1);
     if (nextLevel) {
       const nextProblem = getMysteryProblem(nextLevel);
       if (nextProblem) {
         setCurrentProblem(nextProblem);
         setSelectedSuspect(null);
         setShowAnswer(false);
-        setGameOver(false);
         setTimeStopped(false);
         setHintsUsed(0);
         setRevealedClues(new Set());
@@ -137,25 +140,6 @@ export default function MysteryGame() {
         setShowNotes(false);
         setGameComplete(false);
       }
-    }
-  };
-
-  const handleHint = () => {
-    if (hintsUsed < (currentProblem?.hintCount || 0) && currentProblem) {
-      const unrevealedClue = currentProblem.clues.find(
-        (clue) => !revealedClues.has(clue.id)
-      );
-      if (unrevealedClue) {
-        setHintsUsed((prev) => prev + 1);
-        setRevealedClues((prev) => new Set(prev).add(unrevealedClue.id));
-      }
-    }
-  };
-
-  const handleLevelSelect = (level: number) => {
-    const problem = getMysteryProblem(level);
-    if (problem) {
-      setCurrentProblem(problem);
     }
   };
 
@@ -418,7 +402,6 @@ export default function MysteryGame() {
               {currentProblem.suspects.map((suspect, index) => {
                 const isSelected = selectedSuspect === suspect.id;
                 const isCorrect = suspect.id === currentProblem.correctAnswer;
-                const isWrong = isSelected && !isCorrect;
 
                 return (
                   <motion.button
@@ -463,7 +446,7 @@ export default function MysteryGame() {
                           {suspect.occupation} • Age: {suspect.age}
                         </p>
                         <p className="text-white/80 text-sm italic">
-                          "{suspect.statement}"
+                          &ldquo;{suspect.statement}&rdquo;
                         </p>
                         <div className="mt-2 text-xs text-white/70">
                           <span className="font-semibold">Alibi:</span> {suspect.alibi}
@@ -587,7 +570,6 @@ export default function MysteryGame() {
         </motion.div>
 
         <GameFooter
-          category="mystery"
           onRestart={handleRestart}
           onNextLevel={handleNextLevel}
           showHint={!timeStopped && hintsUsed < currentProblem.hintCount}

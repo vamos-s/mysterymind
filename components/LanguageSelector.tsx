@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
@@ -13,14 +13,12 @@ const languages = [
 
 export default function LanguageSelector() {
   const locale = useLocale();
-  const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
 
   const handleChange = (newLocale: string) => {
     // Remove current locale from pathname
     const segments = pathname.split('/');
-    const currentLocale = segments[1];
     const newPath = segments.slice(2).join('/');
     router.push(`/${newLocale}/${newPath}`);
   };

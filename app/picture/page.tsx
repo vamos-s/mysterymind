@@ -12,10 +12,9 @@ import enMessages from '@/messages/en.json';
 export default function PictureGame() {
   const { currentLevel, addScore } = useGameStore();
 
-  const [currentProblem, setCurrentProblem] = useState<PictureProblem | null>(pictureProblems[0]);
+  const [currentProblem] = useState<PictureProblem | null>(pictureProblems[0]);
   const [foundDifferences, setFoundDifferences] = useState<Set<string>>(new Set());
   const [timeRemaining, setTimeRemaining] = useState(currentProblem?.timeLimit || 240);
-  const [hintsUsed, setHintsUsed] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
   const [hintedDifference, setHintedDifference] = useState<string | null>(null);
@@ -33,12 +32,6 @@ export default function PictureGame() {
 
     return () => clearInterval(timer);
   }, []);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const handleDifferenceClick = (diffId: string) => {
     if (!foundDifferences.has(diffId)) {
@@ -65,24 +58,11 @@ export default function PictureGame() {
     setShowHint(false);
     setTimeRemaining(currentProblem?.timeLimit || 240);
     setGameComplete(false);
-    setHintsUsed(0);
     setHintedDifference(null);
   };
 
   const handleNextLevel = () => {
     handleRestart();
-  };
-
-  const handleHint = () => {
-    if (hintsUsed < (currentProblem?.hintCount || 0) && currentProblem) {
-      const unfoundDifference = currentProblem.differences.find((diff) => !foundDifferences.has(diff.id));
-      if (unfoundDifference) {
-        setHintsUsed((prev) => prev + 1);
-        setHintedDifference(unfoundDifference.id);
-        setShowHint(true);
-        setTimeout(() => setShowHint(false), 3000);
-      }
-    }
   };
 
   if (!currentProblem) return null;
@@ -234,7 +214,6 @@ export default function PictureGame() {
         </motion.div>
 
         <GameFooter
-          category="picture"
           onRestart={handleRestart}
           onNextLevel={handleNextLevel}
           showHint={!gameComplete}

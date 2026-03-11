@@ -12,7 +12,7 @@ import enMessages from '@/messages/en.json';
 export default function EscapeGame() {
   const { currentLevel, addScore } = useGameStore();
 
-  const [currentProblem, setCurrentProblem] = useState<EscapeProblem | null>(escapeProblems[0]);
+  const [currentProblem] = useState<EscapeProblem | null>(escapeProblems[0]);
   const [inventory, setInventory] = useState<string[]>([]);
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
   const [puzzleInput, setPuzzleInput] = useState('');
@@ -36,12 +36,6 @@ export default function EscapeGame() {
 
     return () => clearInterval(timer);
   }, []);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const handleAreaClick = (areaId: string, areaType: string) => {
     setSelectedArea(areaId);
@@ -88,21 +82,11 @@ export default function EscapeGame() {
     handleRestart();
   };
 
-  const handleHint = () => {
-    if (hintsUsed < (currentProblem?.hintCount || 0) && currentProblem) {
-      const unsolvedPuzzle = currentProblem.puzzles.find((p) => !puzzleSolved.has(p.id));
-      if (unsolvedPuzzle) {
-        setHintsUsed((prev) => prev + 1);
-        setShowHint(true);
-      }
-    }
-  };
-
   if (!currentProblem) return null;
 
   const selectedAreaData = currentProblem.room.clickableAreas.find((a) => a.id === selectedArea);
   const currentPuzzle = selectedAreaData?.type === 'puzzle'
-    ? currentProblem.puzzles.find((p) => !puzzleSolved.has(selectedArea!))
+    ? currentProblem.puzzles.find((puzzle) => !puzzleSolved.has(puzzle.id) && puzzle.id === selectedArea!)
     : null;
 
   return (
@@ -285,7 +269,6 @@ export default function EscapeGame() {
         </motion.div>
 
         <GameFooter
-          category="escape"
           onRestart={handleRestart}
           onNextLevel={handleNextLevel}
           showHint={!gameComplete}

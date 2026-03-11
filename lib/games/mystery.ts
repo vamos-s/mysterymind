@@ -5178,3 +5178,17 @@ export const mysteryProblems: MysteryProblem[] = [
     points: 600
   }
 ];
+
+// Helper functions
+export function getMysteryProblem(level: number): MysteryProblem | undefined {
+  return mysteryProblems.find(p => p.level === level);
+}
+
+export function getNextMysteryLevel(currentLevel: number): number {
+  const problem = getMysteryProblem(currentLevel);
+  if (!problem) return 1;
+
+  // Find next level with same or higher difficulty
+  const nextProblem = mysteryProblems.find(p => p.level > currentLevel);
+  return nextProblem ? nextProblem.level : 1; // Return to level 1 if completed all
+}
