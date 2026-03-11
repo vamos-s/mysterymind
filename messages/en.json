@@ -107,5 +107,67 @@
     "image": "Image",
     "complete": "Complete!",
     "foundAll": "You found all {count} differences!"
+  },
+  "gameData": {
+    "mystery": {
+      "problems": {
+        "stolen_cake": {
+          "title": "The Stolen Cake",
+          "description": "A delicious chocolate cake disappeared from the office break room. Four people were working that day. Security cameras show someone eating cake at 2:30 PM.",
+          "suspects": {
+            "kim": {
+              "name": "Kim",
+              "occupation": "Accountant",
+              "statement": "I was at lunch from 1:00 PM to 2:00 PM."
+            },
+            "lee": {
+              "name": "Lee",
+              "occupation": "Manager",
+              "statement": "I was in a meeting all afternoon until 3:00 PM."
+            },
+            "park": {
+              "name": "Park",
+              "occupation": "Receptionist",
+              "statement": "I was organizing files in my office."
+            },
+            "choi": {
+              "name": "Choi",
+              "occupation": "IT Support",
+              "statement": "I was fixing the printer near the break room."
+            }
+          },
+          "clues": {
+            "clue1": "The cake was eaten at exactly 2:30 PM according to security footage.",
+            "clue2": "Kim returned from lunch at 2:15 PM with white cream on their shirt collar.",
+            "clue3": "The meeting actually ended at 2:30 PM, not 3:00 PM."
+          },
+          "evidence": {
+            "ev1": {
+              "name": "Security Camera Footage",
+              "description": "Footage shows the cake being eaten at 2:30 PM."
+            },
+            "ev2": {
+              "name": "Kim's Shirt",
+              "description": "Kim returned from lunch with white cream stains."
+            },
+            "ev3": {
+              "name": "Meeting Minutes",
+              "description": "The meeting officially ended at 2:30 PM."
+            },
+            "ev4": {
+              "name": "Restaurant Receipt",
+              "description": "Receipt shows Kim was at the restaurant from 1:15 PM to 1:45 PM."
+            }
+          },
+          "timeline": {
+            "time1": "1:00 PM",
+            "time2": "1:30 PM",
+            "time3": "2:00 PM",
+            "crimeTime": "2:30 PM",
+            "explanation": "Kim was at lunch until 2:00 PM but returned with cream on their shirt at 2:15 PM. The cake was eaten at 2:30 PM."
+          }
+        }
+      }
+    }
   }
 }

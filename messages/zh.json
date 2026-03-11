@@ -107,5 +107,67 @@
     "image": "图片",
     "complete": "完成！",
     "foundAll": "您找到了所有{count}个不同点！"
+  },
+  "gameData": {
+    "mystery": {
+      "problems": {
+        "stolen_cake": {
+          "title": "被盗的蛋糕",
+          "description": "一块美味的巧克力蛋糕从办公室休息室消失了。那天有四个人在工作。监控摄像头显示有人在下午2:30分吃蛋糕。",
+          "suspects": {
+            "kim": {
+              "name": "金",
+              "occupation": "会计",
+              "statement": "我从1:00 PM到2:00 PM去吃午饭了。"
+            },
+            "lee": {
+              "name": "李",
+              "occupation": "经理",
+              "statement": "我整个下午都在开会直到3:00 PM。"
+            },
+            "park": {
+              "name": "朴",
+              "occupation": "接待员",
+              "statement": "我在办公室整理文件。"
+            },
+            "choi": {
+              "name": "崔",
+              "occupation": "IT支持",
+              "statement": "我在休息室附近修打印机。"
+            }
+          },
+          "clues": {
+            "clue1": "根据监控录像，蛋糕在下午2:30分被吃掉。",
+            "clue2": "金在下午2:15分吃完午饭回来时，衬衫领口上有白色奶油。",
+            "clue3": "会议实际上在下午2:30分结束，不是3:00 PM。"
+          },
+          "evidence": {
+            "ev1": {
+              "name": "监控录像",
+              "description": "录像显示下午2:30分有人正在吃蛋糕。"
+            },
+            "ev2": {
+              "name": "金的衬衫",
+              "description": "金吃完午饭回来时衬衫领口上有白色奶油。"
+            },
+            "ev3": {
+              "name": "会议纪要",
+              "description": "会议纪要显示会议在下午2:30分正式结束。"
+            },
+            "ev4": {
+              "name": "餐厅收据",
+              "description": "收据显示金从1:15 PM到1:45 PM在餐厅。"
+            }
+          },
+          "timeline": {
+            "time1": "1:00 PM",
+            "time2": "1:30 PM",
+            "time3": "2:00 PM",
+            "crimeTime": "2:30 PM",
+            "explanation": "金在2:00 PM前一直在吃午饭，但在2:15 PM回来时衬衫上有奶油。蛋糕在2:30 PM被吃掉。"
+          }
+        }
+      }
+    }
   }
 }
