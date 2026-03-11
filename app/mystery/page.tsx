@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NextIntlClientProvider } from 'next-intl';
 import { useGameStore } from '@/lib/store';
@@ -31,6 +31,7 @@ const CLUE_TYPE_ICONS = {
 
 export default function MysteryGame() {
   const { currentLevel, addScore, subtractScore, setCurrentLevel, score } = useGameStore();
+  const resultRef = useRef<HTMLDivElement>(null);
 
   const [currentProblem, setCurrentProblem] = useState<MysteryProblem | null>(getMysteryProblem(currentLevel) || mysteryProblems[0]);
   const [selectedSuspect, setSelectedSuspect] = useState<string | null>(null);
@@ -123,6 +124,11 @@ export default function MysteryGame() {
       setShowAnswer(true);
       setGameComplete(false);
     }
+
+    // Scroll to result
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
   };
 
   const handleCollectEvidence = (evidenceId: string, cost: number) => {
@@ -529,6 +535,7 @@ export default function MysteryGame() {
           <AnimatePresence>
             {showAnswer && (
               <motion.div
+                ref={resultRef}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
