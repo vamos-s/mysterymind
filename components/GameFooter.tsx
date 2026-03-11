@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 interface GameFooterProps {
   onRestart?: () => void;
   onNextLevel?: () => void;
+  onHint?: () => void;
   showHint?: boolean;
   showRestart?: boolean;
   showNextLevel?: boolean;
@@ -16,6 +17,7 @@ interface GameFooterProps {
 export default function GameFooter({
   onRestart,
   onNextLevel,
+  onHint,
   showHint = true,
   showRestart = true,
   showNextLevel = true
@@ -27,6 +29,9 @@ export default function GameFooter({
   const handleBack = () => {
     router.push('/');
   };
+
+  // Use custom onHint if provided, otherwise use store's useHint
+  const handleHint = onHint || useHint;
 
   return (
     <motion.footer
@@ -48,7 +53,7 @@ export default function GameFooter({
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={useHint}
+            onClick={handleHint}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition-colors"
           >
             💡 {t('common.hint')} ({hintsUsed})

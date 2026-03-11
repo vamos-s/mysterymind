@@ -127,7 +127,7 @@ export default function MysteryGame() {
 
     // Scroll to result
     setTimeout(() => {
-      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }, 100);
   };
 
@@ -170,6 +170,25 @@ export default function MysteryGame() {
         setGameComplete(false);
       }
     }
+  };
+
+  const handleHint = () => {
+    // Find first clue that hasn't been revealed
+    const unrevealedClue = currentProblem.clues.find((clue) => !revealedClues.has(clue.id));
+
+    if (!unrevealedClue) return; // No more clues to reveal
+
+    // Check if player has enough points
+    const clueCost = unrevealedClue.cost || 20;
+    if (score < clueCost) {
+      alert(`Not enough points! You need ${clueCost} points to reveal this clue.`);
+      return;
+    }
+
+    // Deduct points and reveal clue
+    subtractScore(clueCost);
+    setHintsUsed((prev) => prev + 1);
+    setRevealedClues(new Set([...revealedClues, unrevealedClue.id]));
   };
 
   if (!currentProblem) return null;
@@ -607,26 +626,6 @@ export default function MysteryGame() {
                         🔄 Try Again
                       </motion.button>
                     </div>
-                    {/* Show hints that were used */}
-                    {revealedClues.size > 0 && (
-                      <div className="mt-4">
-                        <h4 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                          Clues you revealed:
-                        </h4>
-                        <div className="space-y-2">
-                          {currentProblem.clues
-                            .filter((clue) => revealedClues.has(clue.id))
-                            .map((clue) => (
-                              <div key={clue.id} className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                                <span className="mr-2">{CLUE_TYPE_ICONS[clue.type] || '🔍'}</span>
-                                <span className="text-yellow-700 dark:text-yellow-400 text-sm">
-                                  {clue.description}
-                                </span>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    )}
                   </>
                 )}
               </motion.div>
@@ -637,6 +636,7 @@ export default function MysteryGame() {
         <GameFooter
           onRestart={handleRestart}
           onNextLevel={handleNextLevel}
+          onHint={handleHint}
           showHint={!timeStopped && hintsUsed < currentProblem.hintCount}
           showRestart={gameComplete}
           showNextLevel={gameComplete}
