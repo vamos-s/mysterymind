@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import type { Suspect } from '@/lib/games/mystery.types';
 
 interface NotesModalProps {
@@ -20,6 +21,8 @@ export default function NotesModal({
   onNotesChange,
   disabled = false
 }: NotesModalProps) {
+  const t = useTranslations('mystery');
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -43,7 +46,7 @@ export default function NotesModal({
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10">
                 <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                  📝 Detective Notes
+                  📝 {t('yourNotes')}
                 </h3>
                 <button
                   onClick={onClose}
@@ -69,7 +72,7 @@ export default function NotesModal({
                       <textarea
                         value={notes[suspect.id] || ''}
                         onChange={(e) => onNotesChange(suspect.id, e.target.value)}
-                        placeholder="Write your notes about this suspect..."
+                        placeholder={t('notesPlaceholder')}
                         disabled={disabled}
                         rows={3}
                         className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 text-sm resize-none focus:outline-none focus:border-indigo-500 disabled:opacity-50"

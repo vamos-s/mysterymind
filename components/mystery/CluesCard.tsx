@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 interface Clue {
   id: string;
@@ -38,6 +39,7 @@ export default function CluesCard({
   onRevealClue,
   disabled = false
 }: CluesCardProps) {
+  const t = useTranslations('mystery');
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = useCallback(() => {
@@ -70,7 +72,7 @@ export default function CluesCard({
       >
         <div className="flex items-center gap-2 text-white font-semibold">
           <span>🔍</span>
-          <span>Clues</span>
+          <span>{t('cluesTitle')}</span>
           <span className="text-white/60 text-sm">
             ({revealedClueIds.length}/{clues.length})
           </span>
@@ -117,7 +119,7 @@ export default function CluesCard({
                           </span>
                           {isRevealed && (
                             <span className="text-green-600 dark:text-green-400 text-sm font-medium">
-                              ✓ Revealed
+                              ✓ {t('revealed')}
                             </span>
                           )}
                         </div>
@@ -133,7 +135,7 @@ export default function CluesCard({
                               disabled ? 'opacity-50 cursor-not-allowed' : ''
                             }`}
                           >
-                            Click to reveal (-20 pts)
+                            {t('clickToReveal')}
                           </button>
                         )}
                       </div>

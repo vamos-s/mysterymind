@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 export const dynamic = 'force-dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 import { useGameStore } from '@/lib/store';
 import { mysteryProblems, MysteryProblem, getMysteryProblem, getNextMysteryLevel } from '@/lib/games/mystery';
 import GameHeader from '@/components/GameHeader';
@@ -17,6 +18,7 @@ import CluesCard from '@/components/mystery/CluesCard';
 import ActionButton from '@/components/mystery/ActionButton';
 
 export default function MysteryGame() {
+  const t = useTranslations('mystery');
   const { currentLevel, addScore, subtractScore, setCurrentLevel, score } = useGameStore();
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -271,7 +273,7 @@ export default function MysteryGame() {
         {/* Suspects */}
         <div className="mb-6">
           <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            👥 Suspects
+            👥 {t('suspects')}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentProblem.suspects.map((suspect, index) => (
@@ -299,13 +301,13 @@ export default function MysteryGame() {
             disabled={!canUseHint}
             variant={!canUseHint ? 'secondary' : 'primary'}
           >
-            💡 Get Hint (-20 pts)
+            {t('getHint')}
           </ActionButton>
           <ActionButton
             onClick={() => setShowNotes(!showNotes)}
             variant={showNotes ? 'primary' : 'secondary'}
           >
-            📝 {showNotes ? 'Hide Notes' : 'Show Notes'}
+            {showNotes ? t('hideNotes') : t('showNotes')}
           </ActionButton>
         </div>
 
@@ -332,30 +334,30 @@ export default function MysteryGame() {
               }`}
             >
               <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                {gameComplete ? '🎉 Case Solved!' : '💔 Game Over!'}
+                {gameComplete ? t('caseSolved') : t('gameOver')}
               </h3>
 
               {gameComplete ? (
                 <>
                   <h4 className="font-semibold text-lg text-indigo-600 dark:text-indigo-400 mb-2">
-                    Explanation
+                    {t('explanation')}
                   </h4>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                     {currentProblem.explanation}
                   </p>
                   <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-center mb-4">
                     <p className="text-green-700 dark:text-green-400 font-bold text-lg">
-                      +50 Points Earned!
+                      {t('pointsEarned')}
                     </p>
                   </div>
                   <div className="flex gap-3 justify-center">
                     {getNextMysteryLevel(currentProblem?.level || 1) ? (
                       <ActionButton onClick={handleNextLevel} variant="success">
-                        ➡️ Next Level
+                        {t('nextLevel')}
                       </ActionButton>
                     ) : (
                       <ActionButton onClick={handleRestart}>
-                        🔄 Try Again
+                        {t('tryAgain')}
                       </ActionButton>
                     )}
                   </div>
@@ -364,11 +366,11 @@ export default function MysteryGame() {
                 <>
                   <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-center mb-4">
                     <p className="text-red-700 dark:text-red-400 font-bold text-lg">
-                      You selected the wrong suspect!
+                      {t('wrongSuspect')}
                     </p>
                     {currentProblem?.level > 1 && (
                       <p className="text-red-600 dark:text-red-500 font-bold mt-1">
-                        -50 Points Penalty!
+                        {t('pointsPenalty')}
                       </p>
                     )}
                   </div>
@@ -376,16 +378,16 @@ export default function MysteryGame() {
                   {showResetWarning && (
                     <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-center mb-4 border-2 border-orange-400">
                       <p className="text-orange-700 dark:text-orange-400 font-bold text-lg">
-                        ⚠️ Warning: Next wrong answer will reset to Level 1!
+                        {t('resetWarning')}
                       </p>
                       <p className="text-orange-600 dark:text-orange-500 font-semibold mt-1">
-                        You have less than 50 points. Another wrong answer will reset the game.
+                        {t('resetWarningDesc')}
                       </p>
                     </div>
                   )}
                   <div className="mt-4 text-center">
                     <ActionButton onClick={handleRestart} variant="primary">
-                      🔄 Try Again
+                      {t('tryAgain')}
                     </ActionButton>
                   </div>
                 </>
