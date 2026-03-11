@@ -6,7 +6,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { useGameStore } from '@/lib/store';
 import { mysteryProblems, MysteryProblem, getMysteryProblem, getNextMysteryLevel } from '@/lib/games/mystery';
 import GameHeader from '@/components/GameHeader';
-import GameFooter from '@/components/GameFooter';
 import enMessages from '@/messages/en.json';
 
 const DIFFICULTY_COLORS = {
@@ -97,39 +96,22 @@ export default function MysteryGame() {
       // Wrong answer - deduct 50 points as penalty
       const penalty = 50;
 
-      // Check if player has enough points to continue (only applies if not level 1)
+      // Deduct penalty points (allow going negative on level 1, but show reset warning for level 2+)
+      const newScore = score - penalty;
       const currentLevelValue = currentProblem?.level || 1;
-      if (currentLevelValue > 1 && score < penalty) {
-        // Not enough points - reset to level 1
-        setCurrentLevel(1);
-        const level1Problem = getMysteryProblem(1);
-        if (level1Problem) {
-          setCurrentProblem(level1Problem);
-        }
-        // Reset other states
-        setSelectedSuspect(null);
-        setShowAnswer(false);
-        setTimeStopped(false);
-        setHintsUsed(0);
-        setRevealedClues(new Set());
-        setCollectedEvidence(new Set());
-        setNotes({});
-        setShowNotes(false);
-        setGameComplete(false);
-        return;
-      }
+      const shouldResetToLevel1 = currentLevelValue > 1 && newScore < 0;
 
-      // Deduct penalty points (even if not enough points, go negative for level 1)
       subtractScore(penalty);
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
       setGameComplete(false);
     }
 
-    // Scroll to result
+    // Scroll to result - ensure it actually scrolls to the bottom
     setTimeout(() => {
-      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, 100);
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }, 150);
   };
 
   const handleCollectEvidence = (evidenceId: string, cost: number) => {
@@ -142,6 +124,17 @@ export default function MysteryGame() {
   };
 
   const handleRestart = () => {
+    // Check if should reset to level 1 (level 2+ and points < 0)
+    const currentLevelValue = currentProblem?.level || 1;
+    if (currentLevelValue > 1 && score < 0) {
+      // Reset to level 1
+      setCurrentLevel(1);
+      const level1Problem = getMysteryProblem(1);
+      if (level1Problem) {
+        setCurrentProblem(level1Problem);
+      }
+    }
+    // Reset other states
     setSelectedSuspect(null);
     setShowAnswer(false);
     setTimeStopped(false);
@@ -199,17 +192,33 @@ export default function MysteryGame() {
 
   return (
     <NextIntlClientProvider messages={enMessages} locale="en" timeZone="Asia/Seoul">
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950 pb-24">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950">
         <GameHeader
           title="Mystery Game"
           level={currentProblem.level}
           showScore={true}
           showTime={true}
           timeRemaining={timeRemaining}
+          hintsUsed={hintsUsed}
+          totalHints={currentProblem.hintCount}
+          showHintCounter={true}
         />
 
-        {/* Notes Toggle Button */}
-        <div className="max-w-4xl mx-auto mt-4 px-4 flex justify-end">
+        {/* Action Buttons */}
+        <div className="max-w-4xl mx-auto mt-4 px-4 flex justify-end gap-3">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleHint}
+            disabled={timeStopped || hintsUsed >= currentProblem.hintCount}
+            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 ${
+              !timeStopped && hintsUsed < currentProblem.hintCount
+                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                : 'bg-gray-500 text-gray-300 cursor-not-allowed'
+            }`}
+          >
+            💡 Get Hint (-20 pts)
+          </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -576,10 +585,30 @@ export default function MysteryGame() {
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                       {currentProblem.explanation}
                     </p>
-                    <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
+                    <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-center mb-4">
                       <p className="text-green-700 dark:text-green-400 font-bold text-lg">
                         +50 Points Earned!
                       </p>
+                    </div>
+                    <div className="flex gap-3 justify-center">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleRestart}
+                        className="px-6 py-3 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors font-semibold"
+                      >
+                        🔄 Try Again
+                      </motion.button>
+                      {getNextMysteryLevel(currentProblem?.level || 1) && (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={handleNextLevel}
+                          className="px-6 py-3 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-colors font-semibold"
+                        >
+                          ➡️ Next Level
+                        </motion.button>
+                      )}
                     </div>
                   </>
                 ) : (
@@ -591,11 +620,6 @@ export default function MysteryGame() {
                       <p className="text-red-600 dark:text-red-500 font-bold mt-1">
                         -50 Points Penalty!
                       </p>
-                      {score < 50 && (
-                        <p className="text-orange-600 dark:text-orange-400 font-bold mt-1 text-sm">
-                          ⚠️ Warning: Low points! Another wrong answer will reset to Level 1.
-                        </p>
-                      )}
                     </div>
                     {/* Show hints that were used */}
                     {revealedClues.size > 0 && (
@@ -633,15 +657,6 @@ export default function MysteryGame() {
             )}
           </AnimatePresence>
         </motion.div>
-
-        <GameFooter
-          onRestart={handleRestart}
-          onNextLevel={handleNextLevel}
-          onHint={handleHint}
-          showHint={!timeStopped && hintsUsed < currentProblem.hintCount}
-          showRestart={gameComplete}
-          showNextLevel={gameComplete}
-        />
       </div>
     </NextIntlClientProvider>
   );
