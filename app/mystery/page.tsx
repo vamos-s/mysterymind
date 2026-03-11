@@ -101,18 +101,17 @@ export default function MysteryGame() {
       const penalty = 50;
       const currentLevelValue = currentProblem?.level || 1;
 
-      // Calculate if the next wrong answer will cause reset (score will be < 0 after penalty)
-      const nextScore = score - penalty;
-      const shouldWarnReset = currentLevelValue > 1 && nextScore < 0;
+      // Calculate if the next wrong answer will cause reset (points < 50 before deduction)
+      const shouldWarnReset = currentLevelValue > 1 && score < 50;
 
-      // Deduct penalty points (allow going negative on level 1, but track for reset warning on level 2+)
+      // Deduct penalty points
       subtractScore(penalty);
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
       setGameComplete(false);
       setWasWrongAnswer(true);
 
-      // Show reset warning if on level 2+ and points < 0
+      // Show reset warning if on level 2+ and next wrong answer will cause reset
       setShowResetWarning(shouldWarnReset);
     }
 
@@ -151,10 +150,11 @@ export default function MysteryGame() {
     setCollectedEvidence(new Set());
     setNotes({});
     setShowNotes(false);
-    setTimeRemaining(currentProblem?.timeLimit || 300);
     setGameComplete(false);
     setWasWrongAnswer(false);
     setShowResetWarning(false);
+    // Scroll to top when restarting
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleNextLevel = () => {
@@ -172,6 +172,8 @@ export default function MysteryGame() {
         setNotes({});
         setShowNotes(false);
         setGameComplete(false);
+        // Scroll to top when moving to next level
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   };
@@ -632,14 +634,14 @@ export default function MysteryGame() {
                         -50 Points Penalty!
                       </p>
                     </div>
-                    {/* Reset Warning - only show on level 2+ when points < 0 */}
+                    {/* Reset Warning - show when another wrong answer would cause reset */}
                     {showResetWarning && (
                       <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-center mb-4 border-2 border-orange-400">
                         <p className="text-orange-700 dark:text-orange-400 font-bold text-lg">
-                          ⚠️ Warning: Reset to Level 1!
+                          ⚠️ Warning: Next wrong answer will reset to Level 1!
                         </p>
                         <p className="text-orange-600 dark:text-orange-500 font-semibold mt-1">
-                          Clicking 'Try Again' will reset you to Level 1.
+                          You have less than 50 points. Another wrong answer will reset the game.
                         </p>
                       </div>
                     )}
