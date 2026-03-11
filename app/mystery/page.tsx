@@ -97,8 +97,9 @@ export default function MysteryGame() {
       // Wrong answer - deduct 50 points as penalty
       const penalty = 50;
 
-      // Check if player has enough points to continue
-      if (score < penalty) {
+      // Check if player has enough points to continue (only applies if not level 1)
+      const currentLevelValue = currentProblem?.level || 1;
+      if (currentLevelValue > 1 && score < penalty) {
         // Not enough points - reset to level 1
         setCurrentLevel(1);
         const level1Problem = getMysteryProblem(1);
@@ -118,7 +119,7 @@ export default function MysteryGame() {
         return;
       }
 
-      // Deduct penalty points
+      // Deduct penalty points (even if not enough points, go negative for level 1)
       subtractScore(penalty);
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
@@ -197,7 +198,7 @@ export default function MysteryGame() {
   const timeColor = timePercentage > 50 ? 'bg-green-500' : timePercentage > 25 ? 'bg-yellow-500' : 'bg-red-500';
 
   return (
-    <NextIntlClientProvider messages={enMessages} locale="en">
+    <NextIntlClientProvider messages={enMessages} locale="en" timeZone="Asia/Seoul">
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 dark:from-slate-950 dark:via-purple-950 dark:to-slate-950 pb-24">
         <GameHeader
           title="Mystery Game"
