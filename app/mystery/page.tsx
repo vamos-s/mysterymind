@@ -30,7 +30,7 @@ const CLUE_TYPE_ICONS = {
 } as const;
 
 export default function MysteryGame() {
-  const { currentLevel, addScore, subtractScore, score } = useGameStore();
+  const { currentLevel, addScore, subtractScore, setCurrentLevel, score } = useGameStore();
 
   const [currentProblem, setCurrentProblem] = useState<MysteryProblem | null>(getMysteryProblem(currentLevel) || mysteryProblems[0]);
   const [selectedSuspect, setSelectedSuspect] = useState<string | null>(null);
@@ -87,13 +87,38 @@ export default function MysteryGame() {
     setTimeStopped(true);
 
     if (suspectId === currentProblem?.correctAnswer) {
-      // Correct answer
+      // Correct answer - give 50 points instead of the full problem.points
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
-      addScore(currentProblem.points);
+      addScore(50); // Fixed 50 points for correct answer
       setGameComplete(true);
     } else {
-      // Wrong answer - game over, show result
+      // Wrong answer - deduct 50 points as penalty
+      const penalty = 50;
+
+      // Check if player has enough points to continue
+      if (score < penalty) {
+        // Not enough points - reset to level 1
+        setCurrentLevel(1);
+        const level1Problem = getMysteryProblem(1);
+        if (level1Problem) {
+          setCurrentProblem(level1Problem);
+        }
+        // Reset other states
+        setSelectedSuspect(null);
+        setShowAnswer(false);
+        setTimeStopped(false);
+        setHintsUsed(0);
+        setRevealedClues(new Set());
+        setCollectedEvidence(new Set());
+        setNotes({});
+        setShowNotes(false);
+        setGameComplete(false);
+        return;
+      }
+
+      // Deduct penalty points
+      subtractScore(penalty);
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
       setGameComplete(false);
@@ -526,7 +551,7 @@ export default function MysteryGame() {
                     </p>
                     <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
                       <p className="text-green-700 dark:text-green-400 font-bold text-lg">
-                        +{currentProblem.points} Points Earned!
+                        +50 Points Earned!
                       </p>
                     </div>
                   </>
@@ -536,6 +561,14 @@ export default function MysteryGame() {
                       <p className="text-red-700 dark:text-red-400 font-bold text-lg">
                         You selected the wrong suspect!
                       </p>
+                      <p className="text-red-600 dark:text-red-500 font-bold mt-1">
+                        -50 Points Penalty!
+                      </p>
+                      {score < 50 && (
+                        <p className="text-orange-600 dark:text-orange-400 font-bold mt-1 text-sm">
+                          ⚠️ Warning: Low points! Another wrong answer will reset to Level 1.
+                        </p>
+                      )}
                       <p className="text-gray-600 dark:text-gray-400 mt-2">
                         Click Restart to try again
                       </p>

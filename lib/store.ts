@@ -21,6 +21,7 @@ interface GameState {
   setCurrentLevel: (level: number) => void;
   addScore: (points: number) => void;
   subtractScore: (points: number) => void;
+  resetGame: () => void;
   useHint: () => void;
   setTimeRemaining: (time: number) => void;
   decrementTime: () => void;
