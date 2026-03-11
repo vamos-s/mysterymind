@@ -174,12 +174,12 @@ export default function MysteryGame() {
 
   const handleHint = () => {
     // Find first clue that hasn't been revealed
-    const unrevealedClue = currentProblem.clues.find((clue) => !revealedClues.has(clue.id));
+    const unrevealedClue = currentProblem?.clues.find((clue) => !revealedClues.has(clue.id));
 
     if (!unrevealedClue) return; // No more clues to reveal
 
-    // Check if player has enough points
-    const clueCost = unrevealedClue.cost || 20;
+    // Use fixed cost for hints (clues don't have individual costs)
+    const clueCost = 20;
     if (score < clueCost) {
       alert(`Not enough points! You need ${clueCost} points to reveal this clue.`);
       return;

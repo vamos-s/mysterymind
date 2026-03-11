@@ -29,7 +29,6 @@ interface GameState {
   pauseGame: () => void;
   resumeGame: () => void;
   endGame: () => void;
-  resetGame: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
 }
 
