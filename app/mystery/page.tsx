@@ -44,6 +44,7 @@ export default function MysteryGame() {
   const [showNotes, setShowNotes] = useState(false);
   const [gameComplete, setGameComplete] = useState(false);
   const [wasWrongAnswer, setWasWrongAnswer] = useState(false);
+  const [showResetWarning, setShowResetWarning] = useState(false);
 
   useEffect(() => {
     if (currentProblem) {
@@ -94,20 +95,25 @@ export default function MysteryGame() {
       addScore(50); // Fixed 50 points for correct answer
       setGameComplete(true);
       setWasWrongAnswer(false);
+      setShowResetWarning(false);
     } else {
       // Wrong answer - deduct 50 points as penalty
       const penalty = 50;
-
-      // Deduct penalty points (allow going negative on level 1, but show reset warning for level 2+)
-      const newScore = score - penalty;
       const currentLevelValue = currentProblem?.level || 1;
-      const shouldResetToLevel1 = currentLevelValue > 1 && newScore < 0;
 
+      // Calculate if the next wrong answer will cause reset (score will be < 0 after penalty)
+      const nextScore = score - penalty;
+      const shouldWarnReset = currentLevelValue > 1 && nextScore < 0;
+
+      // Deduct penalty points (allow going negative on level 1, but track for reset warning on level 2+)
       subtractScore(penalty);
       setSelectedSuspect(suspectId);
       setShowAnswer(true);
       setGameComplete(false);
       setWasWrongAnswer(true);
+
+      // Show reset warning if on level 2+ and points < 0
+      setShowResetWarning(shouldWarnReset);
     }
 
     // Scroll to result - ensure it actually scrolls to the bottom
@@ -127,14 +133,13 @@ export default function MysteryGame() {
   };
 
   const handleRestart = () => {
-    // If was wrong answer on level 2+ with points < 0, reset to level 1
+    // If points < 0, reset to level 1 (only applies to level 2+)
     const currentLevelValue = currentProblem?.level || 1;
-    if (wasWrongAnswer && currentLevelValue > 1 && score < 0) {
+    if (currentLevelValue > 1 && score < 0) {
       setCurrentLevel(1);
       const level1Problem = getMysteryProblem(1);
       if (level1Problem) {
         setCurrentProblem(level1Problem);
-        setWasWrongAnswer(false);
       }
     }
     // Reset other states
@@ -148,6 +153,8 @@ export default function MysteryGame() {
     setShowNotes(false);
     setTimeRemaining(currentProblem?.timeLimit || 300);
     setGameComplete(false);
+    setWasWrongAnswer(false);
+    setShowResetWarning(false);
   };
 
   const handleNextLevel = () => {
@@ -625,6 +632,17 @@ export default function MysteryGame() {
                         -50 Points Penalty!
                       </p>
                     </div>
+                    {/* Reset Warning - only show on level 2+ when points < 0 */}
+                    {showResetWarning && (
+                      <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-center mb-4 border-2 border-orange-400">
+                        <p className="text-orange-700 dark:text-orange-400 font-bold text-lg">
+                          ⚠️ Warning: Reset to Level 1!
+                        </p>
+                        <p className="text-orange-600 dark:text-orange-500 font-semibold mt-1">
+                          Clicking 'Try Again' will reset you to Level 1.
+                        </p>
+                      </div>
+                    )}
                     {/* Show hints that were used */}
                     {revealedClues.size > 0 && (
                       <div className="mt-4">
