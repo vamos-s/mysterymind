@@ -49,7 +49,7 @@ export default function GameHeader({
         <div className="flex items-center gap-6">
           {showScore && (
             <div className="text-right">
-              <p className="text-xs text-gray-600 dark:text-gray-400">{t('common.score')}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">{t('common.points')}</p>
               <p className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
                 {score}
               </p>
