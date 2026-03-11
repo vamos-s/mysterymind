@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { getRequestConfig } from 'next-intl/server';
 import "./globals.css";
 import LayoutClient from "./layout-client";
 import enMessages from '@/messages/en.json';

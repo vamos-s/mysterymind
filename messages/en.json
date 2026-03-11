@@ -66,22 +66,46 @@
     "revealed": "Revealed"
   },
   "search": {
+    "title": "Search",
+    "description": "Find hidden objects!",
     "objects": "Objects",
     "found": "Found",
     "remaining": "Remaining",
-    "clickToFind": "Click on objects to find them"
+    "clickToFind": "Click on objects to find them",
+    "objectsToFind": "Objects to Find",
+    "gameScene": "Game Scene",
+    "clickHint": "Click on objects to find them",
+    "complete": "Complete!",
+    "foundAll": "You found all {count} objects!",
+    "findHint": "Click on objects to find them"
   },
   "escape": {
+    "title": "Escape",
+    "description": "Solve puzzles to escape!",
     "puzzle": "Puzzle",
     "solution": "Solution",
     "inventory": "Inventory",
     "examine": "Examine",
-    "locked": "Locked"
+    "locked": "Locked",
+    "empty": "Empty",
+    "room": "Room",
+    "clickHint": "Click on objects to investigate",
+    "enterSolution": "Enter solution...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "hint": "Hint ({used}/{total})",
+    "complete": "Complete!",
+    "escaped": "You escaped the room!"
   },
   "picture": {
+    "title": "Picture",
+    "description": "Find the differences!",
     "differences": "Differences",
     "found": "Found",
     "remaining": "Remaining",
-    "clickDifference": "Click on the differences"
+    "clickDifference": "Click on the differences",
+    "image": "Image",
+    "complete": "Complete!",
+    "foundAll": "You found all {count} differences!"
   }
 }

@@ -66,22 +66,46 @@
     "revealed": "표시됨"
   },
   "search": {
+    "title": "탐색",
+    "description": "숨겨진 물건을 찾으세요!",
     "objects": "물건",
     "found": "찾음",
     "remaining": "남음",
-    "clickToFind": "물건을 클릭하여 찾으세요"
+    "clickToFind": "물건을 클릭하여 찾으세요",
+    "objectsToFind": "찾을 물건",
+    "gameScene": "게임 화면",
+    "clickHint": "클릭하여 물건을 찾으세요",
+    "complete": "완료!",
+    "foundAll": "{count}개의 물건을 모두 찾았습니다!",
+    "findHint": "클릭하여 물건을 찾으세요"
   },
   "escape": {
+    "title": "탈출",
+    "description": "퍼즐을 풀고 탈출하세요!",
     "puzzle": "퍼즐",
     "solution": "해결",
     "inventory": "인벤토리",
     "examine": "조사",
-    "locked": "잠김"
+    "locked": "잠김",
+    "empty": "비어있음",
+    "room": "방",
+    "clickHint": "클릭하여 조사하세요",
+    "enterSolution": "해결책을 입력하세요...",
+    "submit": "제출",
+    "cancel": "취소",
+    "hint": "힌트 ({used}/{total})",
+    "complete": "완료!",
+    "escaped": "방에서 탈출했습니다!"
   },
   "picture": {
+    "title": "그림",
+    "description": "다른 그림을 찾으세요!",
     "differences": "차이",
     "found": "찾음",
     "remaining": "남음",
-    "clickDifference": "차이를 클릭하세요"
+    "clickDifference": "차이를 클릭하세요",
+    "image": "그림",
+    "complete": "완료!",
+    "foundAll": "{count}개의 차이를 모두 찾았습니다!"
   }
 }

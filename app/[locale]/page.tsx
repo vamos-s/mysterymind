@@ -1,28 +1,20 @@
 'use client';
 
-import { NextIntlClientProvider, useTranslations } from 'next-intl';
-import enMessages from '@/messages/en.json';
+import {useTranslations} from 'next-intl';
+import {Link} from '@/i18n/routing';
 
 function GameCard({ href, icon, title, description }: { href: string; icon: string; title: string; description: string }) {
   return (
-    <a href={href} className="p-8 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
+    <Link href={href} className="p-8 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/20 transition-all cursor-pointer">
       <h2 className="text-2xl font-bold text-white mb-2">
         {icon} {title}
       </h2>
       <p className="text-purple-200">{description}</p>
-    </a>
+    </Link>
   );
 }
 
 export default function Home() {
-  return (
-    <NextIntlClientProvider messages={enMessages} locale="en">
-      <HomeContent />
-    </NextIntlClientProvider>
-  );
-}
-
-function HomeContent() {
   const t = useTranslations();
 
   const games = [
@@ -49,4 +41,3 @@ function HomeContent() {
     </div>
   );
 }
-

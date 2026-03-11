@@ -66,22 +66,46 @@
     "revealed": "已显示"
   },
   "search": {
+    "title": "搜索",
+    "description": "找到隐藏的物体！",
     "objects": "物体",
     "found": "已找到",
     "remaining": "剩余",
-    "clickToFind": "点击物体找到它"
+    "clickToFind": "点击物体找到它",
+    "objectsToFind": "要找的物体",
+    "gameScene": "游戏画面",
+    "clickHint": "点击物体找到它",
+    "complete": "完成！",
+    "foundAll": "您找到了所有{count}个物体！",
+    "findHint": "点击物体找到它"
   },
   "escape": {
+    "title": "逃脱",
+    "description": "解谜逃脱！",
     "puzzle": "谜题",
     "solution": "解决",
     "inventory": "库存",
     "examine": "检查",
-    "locked": "已锁定"
+    "locked": "已锁定",
+    "empty": "空",
+    "room": "房间",
+    "clickHint": "点击物体以调查",
+    "enterSolution": "输入解决方案...",
+    "submit": "提交",
+    "cancel": "取消",
+    "hint": "提示 ({used}/{total})",
+    "complete": "完成！",
+    "escaped": "您逃脱了房间！"
   },
   "picture": {
+    "title": "图片",
+    "description": "找不同！",
     "differences": "差异",
     "found": "已找到",
     "remaining": "剩余",
-    "clickDifference": "点击差异"
+    "clickDifference": "点击差异",
+    "image": "图片",
+    "complete": "完成！",
+    "foundAll": "您找到了所有{count}个不同点！"
   }
 }

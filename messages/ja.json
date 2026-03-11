@@ -66,22 +66,46 @@
     "revealed": "表示済み"
   },
   "search": {
+    "title": "探索",
+    "description": "隠されたアイテムを探そう！",
     "objects": "アイテム",
     "found": "見つけた",
     "remaining": "残り",
-    "clickToFind": "アイテムをクリックして見つけよう"
+    "clickToFind": "アイテムをクリックして見つけよう",
+    "objectsToFind": "探すアイテム",
+    "gameScene": "ゲーム画面",
+    "clickHint": "クリックしてアイテムを探そう",
+    "complete": "完了！",
+    "foundAll": "{count}個のアイテムをすべて見つけました！",
+    "findHint": "クリックしてアイテムを探そう"
   },
   "escape": {
+    "title": "脱出",
+    "description": "パズルを解いて脱出せよ！",
     "puzzle": "パズル",
     "solution": "解決",
     "inventory": "インベントリ",
     "examine": "調査",
-    "locked": "ロック"
+    "locked": "ロック",
+    "empty": "空",
+    "room": "部屋",
+    "clickHint": "クリックして調査しよう",
+    "enterSolution": "解決策を入力...",
+    "submit": "送信",
+    "cancel": "キャンセル",
+    "hint": "ヒント ({used}/{total})",
+    "complete": "完了！",
+    "escaped": "部屋から脱出しました！"
   },
   "picture": {
+    "title": "絵合わせ",
+    "description": "間違い探しをしよう！",
     "differences": "違い",
     "found": "見つけた",
     "remaining": "残り",
-    "clickDifference": "違いをクリックしよう"
+    "clickDifference": "違いをクリックしよう",
+    "image": "画像",
+    "complete": "完了！",
+    "foundAll": "{count}個の違いをすべて見つけました！"
   }
 }

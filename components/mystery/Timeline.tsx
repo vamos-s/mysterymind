@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { SuspectLocation, TimelineEntry, Suspect } from '@/lib/games/mystery.types';
+import type { TimelineEntry, Suspect } from '@/lib/games/mystery.types';
 
 interface TimelineProps {
   entries: TimelineEntry[];
