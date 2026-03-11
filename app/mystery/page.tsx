@@ -604,7 +604,7 @@ export default function MysteryGame() {
                         onClick={handleRestart}
                         className="px-6 py-3 rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition-colors font-semibold"
                       >
-                        🔄 Restart Level
+                        🔄 Try Again
                       </motion.button>
                     </div>
                     {/* Show hints that were used */}
