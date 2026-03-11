@@ -20,6 +20,7 @@ interface GameState {
   setCurrentCategory: (category: GameCategory) => void;
   setCurrentLevel: (level: number) => void;
   addScore: (points: number) => void;
+  subtractScore: (points: number) => void;
   useHint: () => void;
   setTimeRemaining: (time: number) => void;
   decrementTime: () => void;
@@ -48,6 +49,7 @@ export const useGameStore = create<GameState>()(
       setCurrentCategory: (category) => set({ currentCategory: category }),
       setCurrentLevel: (level) => set({ currentLevel: level }),
       addScore: (points) => set((state) => ({ score: state.score + points })),
+      subtractScore: (points) => set((state) => ({ score: Math.max(0, state.score - points) })),
       useHint: () => set((state) => ({ hintsUsed: state.hintsUsed + 1 })),
       setTimeRemaining: (time) => set({ timeRemaining: time }),
       decrementTime: () => set((state) => ({

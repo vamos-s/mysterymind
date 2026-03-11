@@ -30,7 +30,7 @@ const CLUE_TYPE_ICONS = {
 } as const;
 
 export default function MysteryGame() {
-  const { currentLevel, addScore, score } = useGameStore();
+  const { currentLevel, addScore, subtractScore, score } = useGameStore();
 
   const [currentProblem, setCurrentProblem] = useState<MysteryProblem | null>(getMysteryProblem(currentLevel) || mysteryProblems[0]);
   const [selectedSuspect, setSelectedSuspect] = useState<string | null>(null);
@@ -105,9 +105,7 @@ export default function MysteryGame() {
 
     if (score >= cost) {
       setCollectedEvidence(new Set([...collectedEvidence, evidenceId]));
-      // Deduct points for evidence collection
-      // Note: We'd need a subtractScore function in the store
-      // For now, just mark as collected
+      subtractScore(cost);
     }
   };
 
